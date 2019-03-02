@@ -76,10 +76,9 @@ cd ${CURRENT_DIR}/thirdparty
 
 
 # Added doxygen install. TODO moved from here and tested for other OS (i.e. Mac OSX)
-sudo apt-get install doxygen
-sudo apt-get install python2.7-dev python-numpy
+sudo apt-get install -y doxygen python2.7-dev python-numpy
 sudo pip install --user numpy
-sudo apt-get -qq install graphviz
+sudo apt-get -qq install -y graphviz
 
 
 # Installing the dwl dependencies

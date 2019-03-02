@@ -60,7 +60,7 @@ if [ "$CURRENT_OS" == "OSX" ]; then
 	fi
 elif [ "$CURRENT_OS" == "UBUNTU" ]; then
 	# Installing libcmaes dependecies
-	sudo apt-get install autoconf automake libtool libgoogle-glog-dev libgflags-dev 
+	sudo apt-get install -y autoconf automake libtool libgoogle-glog-dev libgflags-dev 
 
 	# Compiling and installing Google unit test framework
 	if [ ! -f googletest-1.8.0.tar.gz  ]; then

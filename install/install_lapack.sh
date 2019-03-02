@@ -63,5 +63,5 @@ if [ "$CURRENT_OS" == "OSX" ]; then
 		make -j install
 	fi
 elif [ "$CURRENT_OS" == "UBUNTU" ]; then
-	sudo apt-get install liblapack3 liblapack-dev
+	sudo apt-get install -y liblapack3 liblapack-dev
 fi

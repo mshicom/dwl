@@ -152,6 +152,6 @@ if [ "$CURRENT_OS" == "OSX" ]; then
 	fi
 elif [ "$CURRENT_OS" == "UBUNTU" ]; then
 	# Installing necessary packages
-	sudo apt-get install f2c libf2c2-dev libf2c2 gfortran coinor-libipopt-dev coinor-libipopt1v5
+	sudo apt-get install -y f2c libf2c2-dev libf2c2 gfortran coinor-libipopt-dev coinor-libipopt1v5
 
 fi

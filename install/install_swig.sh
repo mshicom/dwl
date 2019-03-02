@@ -47,7 +47,7 @@ fi
 if [ "$CURRENT_OS" == "OSX" ]; then
 	install_swig
 elif [ "$CURRENT_OS" == "UBUNTU" ]; then
-	sudo apt-get install swig3.0
+	sudo apt-get install -y swig3.0
 fi
 
 

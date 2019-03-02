@@ -28,7 +28,7 @@ if [ "$CURRENT_OS" == "OSX" ]; then
 	echo -e "${COLOR_WARN}Mac OSX installation not support yet${COLOR_RESET}"
 elif [ "$CURRENT_OS" == "UBUNTU" ]; then
 	# Installing qt5
-	sudo apt-get install qt5-default
+	sudo apt-get install -y qt5-default
 
 	# Getting the gnuplot 5.0.3
 	if [ ! -f gnuplot-5.0.3.tar.gz ]; then
