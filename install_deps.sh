@@ -83,8 +83,8 @@ sudo apt-get -qq install graphviz
 
 
 # Installing the dwl dependencies
-if [[ $1 == 'default' ]]; then
-	INSTALL_DEPS_PREFIX=$HOME/openrobots
+if [ $1 ]; then
+	INSTALL_DEPS_PREFIX=$1
 	mkdir -p $INSTALL_DEPS_PREFIX
 
 	# Installing all the dwl dependencies
