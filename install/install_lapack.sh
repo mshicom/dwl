@@ -15,17 +15,37 @@ VERBOSITY=""
 if [[ $3 == False ]]; then
 	VERBOSITY="-DCMAKE_RULE_MESSAGES:BOOL=OFF"
 fi
-DWL_DIR="$( cd ../ "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DWL_DIR="$( cd "$(dirname "$(readlink -f $0)")" && cd ../ && pwd )" 
 INFO=( $(stat -L -c "%a %G %U" $INSTALL_DEPS_PREFIX) )
 OWNER=${INFO[2]}
 
-# Remove old folder (sanity procedure)
-cd $DWL_DIR/thirdparty
-if [[ $OWNER == 'root' ]]; then
-	sudo rm -rf lapack
-else
-	rm -rf lapack
-fi
+function install_lapack{
+	# Remove old folder (sanity procedure)
+	cd $DWL_DIR/thirdparty
+	if [[ $OWNER == 'root' ]]; then
+		sudo rm -rf lapack
+	else
+		rm -rf lapack
+	fi
+	# Getting the LAPACK 3.6.0
+	if [ ! -f lapack-3.6.0.tgz ]; then
+		wget http://www.netlib.org/lapack/lapack-3.6.0.tgz
+	fi
+	mkdir lapack && tar xzvf lapack-3.6.0.tgz -C lapack --strip-components 1
+	#rm -rf lapack-3.6.0.tgz
+	cd lapack
+	mkdir -p build
+	cd build
+	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_DEPS_PREFIX -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_LIBDIR=lib $VERBOSITY ../
+	make -j
+	if [[ $OWNER == 'root' ]]; then
+		sudo make -j install
+	else
+		make -j install
+	fi
+}
+
+
 
 if [ "$CURRENT_OS" == "OSX" ]; then
 	# Getting the LAPACK 3.6.0
@@ -43,18 +63,5 @@ if [ "$CURRENT_OS" == "OSX" ]; then
 		make -j install
 	fi
 elif [ "$CURRENT_OS" == "UBUNTU" ]; then
-	# Getting the LAPACK 3.6.0
-	wget http://www.netlib.org/lapack/lapack-3.6.0.tgz
-	mkdir lapack && tar xzvf lapack-3.6.0.tgz -C lapack --strip-components 1
-	rm -rf lapack-3.6.0.tgz
-	cd lapack
-	mkdir -p build
-	cd build
-	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_DEPS_PREFIX -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_LIBDIR=lib $VERBOSITY ../
-	make -j
-	if [[ $OWNER == 'root' ]]; then
-		sudo make -j install
-	else
-		make -j install
-	fi
+	sudo apt-get install liblapack3 liblapack-dev
 fi

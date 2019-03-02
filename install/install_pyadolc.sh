@@ -15,7 +15,7 @@ VERBOSITY=""
 if [[ $3 == False ]]; then
 	VERBOSITY="-DCMAKE_RULE_MESSAGES:BOOL=OFF"
 fi
-DWL_DIR="$( cd ../ "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DWL_DIR="$( cd "$(dirname "$(readlink -f $0)")" && cd ../ && pwd )" 
 INFO=( $(stat -L -c "%a %G %U" $INSTALL_DEPS_PREFIX) )
 OWNER=${INFO[2]}
 
@@ -29,11 +29,13 @@ fi
 
 # Installing ColPAck
 # Download ColPack
-wget -O ColPack-1.0.10.tar.gz https://github.com/CSCsw/ColPack/archive/v1.0.10.tar.gz
+if [ ! -f ColPack-1.0.10.tar.gz ]; then
+	wget -O ColPack-1.0.10.tar.gz https://github.com/CSCsw/ColPack/archive/v1.0.10.tar.gz
+fi
 
 # build ColPack
 tar xfvz ColPack-1.0.10.tar.gz
-rm ColPack-1.0.10.tar.gz
+#rm ColPack-1.0.10.tar.gz
 mv ColPack-1.0.10 colpack
 cd colpack
 autoreconf -vif
@@ -55,9 +57,11 @@ else
 fi
 
 # Download ADOL-C
-wget http://www.coin-or.org/download/source/ADOL-C/ADOL-C-2.6.0.tgz
+if [ ! -f ADOL-C-2.6.0.tgz ]; then
+	wget http://www.coin-or.org/download/source/ADOL-C/ADOL-C-2.6.0.tgz
+fi
 tar xfvz ADOL-C-2.6.0.tgz
-rm ADOL-C-2.6.0.tgz
+#rm ADOL-C-2.6.0.tgz
 mv ADOL-C-2.6.0 adolc
 cd adolc
 ./update_versions.sh
@@ -75,8 +79,10 @@ cd $DWL_DIR/thirdparty
 sudo rm -rf pyadolc
 
 # Downloading pyadolc
-wget https://github.com/robot-locomotion/pyadolc/archive/master.zip
-unzip master.zip -d pyadolc && rm master.zip
+if [ ! -f pyadolc.zip ]; then
+	wget -O pyadolc.zip https://github.com/robot-locomotion/pyadolc/archive/master.zip
+fi
+unzip pyadolc.zip -d pyadolc # && rm master.zip
 cd pyadolc
 mv pyadolc-master/* . && rm -rf pyadolc-master
 sed -i 's/raw_input/#raw_input/' setup.py # Do not asking for checking

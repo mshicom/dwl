@@ -15,7 +15,7 @@ VERBOSITY=""
 if [[ $3 == False ]]; then
 	VERBOSITY="-DCMAKE_RULE_MESSAGES:BOOL=OFF"
 fi
-DWL_DIR="$( cd ../ "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DWL_DIR="$( cd "$(dirname "$(readlink -f $0)")" && cd ../ && pwd )" 
 INFO=( $(stat -L -c "%a %G %U" $INSTALL_DEPS_PREFIX) )
 OWNER=${INFO[2]}
 
@@ -31,7 +31,7 @@ if [ "$CURRENT_OS" == "OSX" ]; then
 	echo -e "${COLOR_WARN}Mac OSX installation not support yet${COLOR_RESET}"
 	# Getting the qpOASES 3.2.0
 	wget http://www.coin-or.org/download/source/qpOASES/qpOASES-3.2.0.tgz
-	tar xzfv qpOASES-3.2.0.tgz && rm qpOASES-3.2.0.tgz
+	tar xzfv qpOASES-3.2.0.tgz #&& rm qpOASES-3.2.0.tgz
 	mv qpOASES-3.2.0 qpOASES
 		
 	# Installing LAPACK and BLAS
@@ -57,8 +57,10 @@ if [ "$CURRENT_OS" == "OSX" ]; then
 	fi
 elif [ "$CURRENT_OS" == "UBUNTU" ]; then
 	# Getting the qpOASES 3.2.0
-	wget http://www.coin-or.org/download/source/qpOASES/qpOASES-3.2.0.tgz
-	tar xzfv qpOASES-3.2.0.tgz && rm qpOASES-3.2.0.tgz
+	if [ ! -f qpOASES-3.2.0.tgz ]; then
+		wget http://www.coin-or.org/download/source/qpOASES/qpOASES-3.2.0.tgz
+	fi
+	tar xzfv qpOASES-3.2.0.tgz #&& rm qpOASES-3.2.0.tgz
 	mv qpOASES-3.2.0 qpOASES
 
 	# Installing LAPACK and BLAS

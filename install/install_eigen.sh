@@ -16,7 +16,7 @@ VERBOSITY=""
 if [[ $3 == False ]]; then
 	VERBOSITY="-DCMAKE_RULE_MESSAGES:BOOL=OFF"
 fi
-DWL_DIR="$( cd ../ "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DWL_DIR="$( cd "$(dirname "$(readlink -f $0)")" && cd ../ && pwd )" 
 INFO=( $(stat -L -c "%a %G %U" $INSTALL_DEPS_PREFIX) )
 OWNER=${INFO[2]}
 
@@ -30,7 +30,7 @@ fi
 
 if [ "$CURRENT_OS" == "OSX" ]; then
 	# Getting Eigen 3.2.10
-	curl -L "http://www.bitbucket.org/eigen/eigen/get/3.2.10.tar.bz2" | tar xj
+	#curl -L "http://www.bitbucket.org/eigen/eigen/get/3.2.10.tar.bz2" | tar xj
 	mv eigen-eigen-*/ eigen
 	cd eigen
 	mkdir -p build
@@ -45,9 +45,11 @@ if [ "$CURRENT_OS" == "OSX" ]; then
 elif [ "$CURRENT_OS" == "UBUNTU" ]; then
 #	sudo apt-get install libeigen3-dev
 	# Getting Eigen 3.2.10
-	wget http://www.bitbucket.org/eigen/eigen/get/3.2.10.tar.bz2
-	mkdir eigen && tar jxf 3.2.10.tar.bz2 -C eigen --strip-components 1
-	rm -rf 3.2.10.tar.bz2
+	if [ ! -f eigen_3.2.10.tar.bz2 ]; then
+		wget -O eigen_3.2.10.tar.bz2 http://www.bitbucket.org/eigen/eigen/get/3.2.10.tar.bz2
+	fi
+	mkdir eigen && tar jxf eigen_3.2.10.tar.bz2 -C eigen --strip-components 1
+	#rm -rf 3.2.10.tar.bz2
 	cd eigen
 	mkdir -p build
 	cd build

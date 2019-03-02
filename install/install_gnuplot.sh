@@ -15,7 +15,7 @@ VERBOSITY=""
 if [[ $3 == False ]]; then
 	VERBOSITY="-DCMAKE_RULE_MESSAGES:BOOL=OFF"
 fi
-DWL_DIR="$( cd ../ "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DWL_DIR="$( cd "$(dirname "$(readlink -f $0)")" && cd ../ && pwd )" 
 INFO=( $(stat -L -c "%a %G %U" $INSTALL_DEPS_PREFIX) )
 OWNER=${INFO[2]}
 
@@ -31,9 +31,11 @@ elif [ "$CURRENT_OS" == "UBUNTU" ]; then
 	sudo apt-get install qt5-default
 
 	# Getting the gnuplot 5.0.3
-	wget https://sourceforge.net/projects/gnuplot/files/gnuplot/5.0.3/gnuplot-5.0.3.tar.gz
+	if [ ! -f gnuplot-5.0.3.tar.gz ]; then
+		wget https://sourceforge.net/projects/gnuplot/files/gnuplot/5.0.3/gnuplot-5.0.3.tar.gz
+	fi
 	mkdir gnuplot && tar zxf gnuplot-5.0.3.tar.gz -C gnuplot --strip-components 1
-	rm -rf gnuplot-5.0.3.tar.gz
+	#rm -rf gnuplot-5.0.3.tar.gz
 	cd gnuplot
 	./configure
 	make -j

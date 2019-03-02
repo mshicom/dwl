@@ -15,7 +15,7 @@ VERBOSITY=""
 if [[ $3 == False ]]; then
 	VERBOSITY="-DCMAKE_RULE_MESSAGES:BOOL=OFF"
 fi
-DWL_DIR="$( cd ../ "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DWL_DIR="$( cd "$(dirname "$(readlink -f $0)")" && cd ../ && pwd )" 
 INFO=( $(stat -L -c "%a %G %U" $INSTALL_DEPS_PREFIX) )
 OWNER=${INFO[2]}
 
@@ -47,8 +47,11 @@ elif [ "$CURRENT_OS" == "UBUNTU" ]; then
 	sudo apt-get install -qqy libboost-all-dev
 
 	# Getting the YAML-CPP 0.5.2
-	wget https://github.com/jbeder/yaml-cpp/archive/release-0.5.2.zip
-	unzip release-0.5.2.zip && rm -rf release-0.5.2.zip
+	if [ ! -f yaml-cpp-0.5.2.zip ]; then
+		wget -O yaml-cpp-0.5.2.zip https://github.com/jbeder/yaml-cpp/archive/release-0.5.2.zip
+	fi
+
+	unzip yaml-cpp-0.5.2.zip #&& rm -rf yaml-cpp-0.5.2.zip
 	mv yaml-cpp-*/ yaml-cpp
 	cd yaml-cpp
 	mkdir -p build

@@ -15,7 +15,7 @@ VERBOSITY=""
 if [[ $3 == False ]]; then
 	VERBOSITY="-DCMAKE_RULE_MESSAGES:BOOL=OFF"
 fi
-DWL_DIR="$( cd ../ "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DWL_DIR="$( cd "$(dirname "$(readlink -f $0)")" && cd ../ && pwd )" 
 INFO=( $(stat -L -c "%a %G %U" $INSTALL_DEPS_PREFIX) )
 OWNER=${INFO[2]}
 
@@ -43,9 +43,11 @@ if [ "$CURRENT_OS" == "OSX" ]; then
 	fi
 elif [ "$CURRENT_OS" == "UBUNTU" ]; then
 	# Getting Octomap 1.6.8
-	wget https://github.com/OctoMap/octomap/archive/v1.6.8.tar.gz
-	mkdir octomap && tar zxf v1.6.8.tar.gz -C octomap --strip-components 1
-	rm -rf v1.6.8.tar.gz
+	if [ ! -f octomap_v1.6.8.tar.gz ]; then
+		wget -O octomap_v1.6.8.tar.gz https://github.com/OctoMap/octomap/archive/v1.6.8.tar.gz
+	fi
+	mkdir octomap && tar zxf octomap_v1.6.8.tar.gz -C octomap --strip-components 1
+	#rm -rf v1.6.8.tar.gz
 	cd octomap
 	mkdir -p build
 	cd build

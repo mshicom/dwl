@@ -9,12 +9,13 @@ COLOR_WARN="\033[0;33m"
 COLOR_BOLD="\033[1m"
 COLOR_UNDE="\033[4m"
 
-INSTALL_DEPS_PREFIX=/usr/local
-COMMON_INSTALL_PREFIX=/usr
+
 
 # Getting the current directory of this script
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CURRENT_DIR=$(dirname "$(readlink -f $0)")
 
+INSTALL_DEPS_PREFIX=${CURRENT_DIR}/thirdparty  #/usr/local
+COMMON_INSTALL_PREFIX=${CURRENT_DIR} #/usr
 
 ## This function detects the current os and distro
 CURRENT_OS="Unsupported" #CENTOS, UBUNTU are other valid options
@@ -268,7 +269,7 @@ else
 	##---------------------------------------------------------------##
 	echo ""
 	echo -e "${COLOR_BOLD}Installing Octomap ...${COLOR_RESET}"
-	if [ -d "/usr/local/include/octomap" ]; then
+	if [ -d "$INSTALL_DEPS_PREFIX/include/octomap" ]; then
 		echo -e -n "${COLOR_QUES}Do you want to re-install Octomap 1.6.8? [y/N]: ${COLOR_RESET}"
 		read ANSWER_OCTOMAP
 		if [ "$ANSWER_OCTOMAP" == "Y" ] || [ "$ANSWER_OCTOMAP" == "y" ]; then
