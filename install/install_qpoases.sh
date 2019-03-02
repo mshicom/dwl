@@ -77,7 +77,7 @@ elif [ "$CURRENT_OS" == "UBUNTU" ]; then
 	fi
 	mkdir build
 	cd build
-	cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DEPS_PREFIX $VERBOSITY ../
+	cmake -DCMAKE_CXX_FLAGS="-fPIC" -DCMAKE_INSTALL_PREFIX=$INSTALL_DEPS_PREFIX $VERBOSITY ../
 	make -j4
 	if [[ $OWNER == 'root' ]]; then
 		sudo make -j install
